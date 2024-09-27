@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: cluster-tooling
+  namespace: argocd
+spec:
+  sourceRepos:
+  # Do not use the test repo in argoproj
+  # - '!ssh://git@GITHUB.com:argoproj/test'
+  # Nor any Gitlab repo under group/ 
+  # - '!https://gitlab.com/group/**'
+  # Any other repo is fine though
+  - '*'
+  destinations:
+  # Do not allow any app to be installed in `kube-system`  
+  # - namespace: '!kube-system'
+  #   server: '*'
+  # Or any cluster that has a URL of `team1-*`   
+  # - namespace: '*'
+  #   server: '!https://team1-*'
+  # Any other namespace or server is fine though.
+  - namespace: '*'
+    server: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: cluster-tooling
+  source:
+    repoURL: http://gitea:30000/gitea/gitops-lab.git
+    targetRevision: main
+    path: gitops-code/argocd-manifests/
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd

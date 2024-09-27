@@ -6,11 +6,11 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: cluster-tooling
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps.git
-    targetRevision: HEAD
-    path: guestbook
+    repoURL: http://gitea:30000/gitea/gitops-lab.git
+    targetRevision: main
+    path: gitops-code/tooling-manifests/ingress-nginx
   destination:
     server: https://kubernetes.default.svc
-    namespace: guestbook
+    namespace: ingress-nginx
