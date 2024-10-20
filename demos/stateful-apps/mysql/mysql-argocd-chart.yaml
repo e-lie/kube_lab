@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mysql-chart
+  namespace: argocd
+spec:
+  destination:
+    namespace: mysql-chart-demo
+    server: https://kubernetes.default.svc
+  project: default
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    # automated:
+    #   prune: true # Automatically delete resources that are no longer defined in the Git repository
+    #   selfHeal: true # If a resource is out of sync, automatically sync it
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: mysql
+    targetRevision: 11.1.19
+    helm:
+      values: |
+        architecture: replication
+        auth:
+          rootPassword: "oaU*iu3ku84ef"
+          createDatabase: true
+          database: "app"
+          username: "app"
+          password: "Uiku8u?oa34e-"

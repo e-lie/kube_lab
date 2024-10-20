@@ -2,5 +2,8 @@ export PROJECT_DIR=$(pwd)
 export KIND_CLUSTER_NAME=lab1plus3
 export KIND_CLUSTER_CONFIG_PATH="$PWD/kind/kind-lab1plus3-config.yaml"
 
+export KUBETOFU_PATH="$(pwd)/../kube_tofu"
+export IP_FILE_PATH="$KUBETOFU_PATH/file_output/public_ips.txt"
+
 # eval $(ssh-agent)
 # ssh-add ~/.ssh/id_guacamole_infra 

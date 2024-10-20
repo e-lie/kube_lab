@@ -17,6 +17,7 @@ HEREDOC
 
 
 _kind_stop() {
+    # Stop all container starting with prefix and remove loadbalancer mechanism containers
     local prefix="$1"
     echo "Stop existing cluster $prefix..."
     docker ps --filter "name=^${prefix}" --format "{{.ID}}" | xargs -r docker stop >/dev/null 2>&1 
@@ -50,6 +51,7 @@ _cluster_up() {
         _kind_create 
     fi
     
+    kind export kubeconfig --name $KIND_CLUSTER_NAMEz
 }
 
 _cluster_down() {
@@ -57,7 +59,7 @@ _cluster_down() {
 }
 
 _cluster_destroy() {
-    _cluster_down
+    # _cluster_down
     kind delete cluster --name $KIND_CLUSTER_NAME
 }
 
@@ -72,17 +74,18 @@ _argocd_install() {
     kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f - # create ns if not exist
     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
     kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-    kubectl apply -f $PWD/tooling-manifests/argocd/tooling-argocd-project.yaml
+    kubectl apply -f $PWD/gitops-code/cluster-tooling-project.yaml
+    kubectl apply -f $PWD/gitops-code/argocd-ingress.yaml
     _argocd_login
 }
 
 _ingress_install(){
-    INGRESS_MANIFESTS_URL=https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-    wget $INGRESS_MANIFESTS_URL -O $PWD/tooling-manifests/applied/ingress-nginx.yaml
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 }
 
 _cluster_bootstrap() {
-    _argocd_install
+    _ingress_install
+    # _argocd_install
 }
 
 _main() {
