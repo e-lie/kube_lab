@@ -1,0 +1,21 @@
+architecture: replication # default standalone
+auth:
+  ## @param auth.rootPassword Password for the `root` user. Ignored if existing secret is provided
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-the-root-password-on-first-run
+  ##
+  rootPassword: "oaU*iu3ku84ef"
+  ## @param auth.createDatabase Whether to create the .Values.auth.database or not
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#creating-a-database-on-first-run
+  ##
+  createDatabase: true
+  ## @param auth.database Name for a custom database to create
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#creating-a-database-on-first-run
+  ##
+  database: "app"
+  ## @param auth.username Name for a custom user to create
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#creating-a-database-user-on-first-run
+  ##
+  username: "app"
+  ## @param auth.password Password for the new user. Ignored if existing secret is provided
+  ##
+  password: "Uiku8u?oa34e-"
